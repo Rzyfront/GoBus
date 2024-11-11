@@ -9,7 +9,6 @@ def main():
     print("\nPROYECTO DESARROLLADO POR:\n")
     print("\nRafael Martinez\n")
     print("Cristian Milian\n")
-
     # AGREGAR NOMBRES ARRIBA DE ESTE COMENTARIO
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gobus_backend.settings')
