@@ -8,6 +8,8 @@ def main():
      # DEVS
     print("\nPROYECTO DESARROLLADO POR:\n")
     print("\nRafael Martinez\n")
+    print("Cristian Milian\n")
+    
 
     # AGREGAR NOMBRES ARRIBA DE ESTE COMENTARIO
     """Run administrative tasks."""
