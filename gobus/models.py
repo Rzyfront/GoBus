@@ -1,7 +1,5 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
+from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
 
 class Agencia(models.Model):
     nombre = models.CharField(max_length=100)
@@ -62,26 +60,12 @@ class Conductor(models.Model):
         return self.nombre
 
 
-class Usuario(models.Model):
-    nombre = models.CharField(max_length=100)
-    correo = models.EmailField(unique=True)
-    contraseña = models.CharField(max_length=128)
-    telefono = models.CharField(max_length=15, blank=True, null=True)
-    tipo_usuario = models.CharField(max_length=50, choices=[
-        ('cliente', 'Cliente'),
-        ('administrador', 'Administrador'),
-    ])
-
-    def __str__(self):
-        return self.nombre
-
-
 class Pasajero(models.Model):
     documento_identidad = models.CharField(max_length=20, unique=True)
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación con el usuario de Django
 
     def __str__(self):
-        return f"{self.usuario.nombre} - {self.documento_identidad}"
+        return f"{self.usuario.username} - {self.documento_identidad}"
 
 
 class Boleto(models.Model):
