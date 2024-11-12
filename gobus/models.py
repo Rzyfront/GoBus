@@ -26,15 +26,15 @@ class Ruta(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
     distancia = models.DecimalField(max_digits=5, decimal_places=2)
-    duracion_estimada = models.DecimalField(max_digits=4, decimal_places=2)  # en horas
+    duracion_estimada = models.DecimalField(max_digits=4, decimal_places=2)
 
     def __str__(self):
         return f"{self.origen} - {self.destino}"
 
 
 class Bus(models.Model):
-    placa = models.CharField(max_length=10, unique=True)
-    capacidad = models.IntegerField()
+    placa = models.CharField(max_length=10)
+    capacidad = models.PositiveIntegerField()
     tipo = models.CharField(max_length=50, choices=[
         ('EJ', 'Ejecutivo'),
         ('ES', 'Estándar'),
@@ -48,6 +48,23 @@ class Bus(models.Model):
 
     def __str__(self):
         return self.placa
+
+class Viaje(models.Model):
+    ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE)
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
+    fecha_viaje = models.DateField()
+    hora_salida = models.TimeField()
+
+    def asientos_disponibles(self):
+        boletos_vendidos = Boleto.objects.filter(viaje=self).count()
+        return self.bus.capacidad - boletos_vendidos > 0
+    
+    def cantidad_asientos_disponibles(self):
+        boletos_vendidos = Boleto.objects.filter(viaje=self).count()
+        return self.bus.capacidad - boletos_vendidos
+
+    def __str__(self):
+            return f"{self.fecha_viaje} {self.hora_salida}"
 
 
 class Conductor(models.Model):
@@ -69,16 +86,16 @@ class Pasajero(models.Model):
 
 
 class Boleto(models.Model):
-    fecha_viaje = models.DateField()
-    hora_salida = models.TimeField()
-    asiento = models.IntegerField()
-    precio = models.DecimalField(max_digits=7, decimal_places=2)
+    pasajero = models.ForeignKey(User, on_delete=models.CASCADE)
+    viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)  # Relación con Viaje
+    asiento = models.PositiveIntegerField()
+    precio = models.DecimalField(max_digits=6, decimal_places=2)
     estado = models.CharField(max_length=20, choices=[
         ('reservado', 'Reservado'),
         ('cancelado', 'Cancelado'),
         ('confirmado', 'Confirmado'),
     ])
-    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Boleto {self.id} para {self.pasajero}"
+

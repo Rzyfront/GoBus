@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Agencia, Terminal, Ruta, Bus, Conductor, Pasajero, Boleto
+from .models import Agencia, Terminal, Ruta, Bus, Conductor, Pasajero, Boleto, Viaje
 
 
 # Serializador para el modelo de Usuario de Django
@@ -28,6 +28,11 @@ class RutaSerializer(serializers.ModelSerializer):
         model = Ruta
         fields = ['id', 'origen', 'destino', 'distancia', 'duracion_estimada']
 
+class ViajeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Viaje
+        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida']
+
 
 class BusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +56,7 @@ class PasajeroSerializer(serializers.ModelSerializer):
 
 class BoletoSerializer(serializers.ModelSerializer):
     pasajero = PasajeroSerializer()  # Incluir el pasajero como un nested serializer
-
+    viaje = ViajeSerializer() 
     class Meta:
         model = Boleto
-        fields = ['id', 'fecha_viaje', 'hora_salida', 'asiento', 'precio', 'estado', 'pasajero']
+        fields = ['id','viaje','asiento', 'precio', 'estado', 'pasajero']
