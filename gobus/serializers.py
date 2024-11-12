@@ -26,12 +26,12 @@ class TerminalSerializer(serializers.ModelSerializer):
 class RutaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ruta
-        fields = ['id', 'origen', 'destino', 'distancia', 'duracion_estimada']
+        fields = ['id', 'origen', 'destino', 'distancia', 'duracion_estimada', 'fecha_viaje', 'hora_salida',]
 
 class ViajeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Viaje
-        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida']
+        fields = ['id', 'ruta', 'bus', 'precio']
 
 
 class BusSerializer(serializers.ModelSerializer):
