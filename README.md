@@ -20,3 +20,7 @@ Para correr el proyecto asegurese de ejecutar el comando:
 pip install -r requirements.txt
 
 para instalar los requerimientos del proyecto
+
+para ejecutar el servidor del backend deben ejecutar el comando python manage.py runserver en el directorio raíz
+
+para ejecutar el cliente de la aplicacion deben ejecutar npm instal para instala dependencias y luego npm run dev en el directorio del frontend
