@@ -5,7 +5,7 @@ from rest_framework.documentation import include_docs_urls
 
 from .views import (
     UserViewSet, AgenciaViewSet, TerminalViewSet, RutaViewSet,
-    BusViewSet, ConductorViewSet, PasajeroViewSet, BoletoViewSet
+    BusViewSet, ConductorViewSet, PasajeroViewSet, BoletoViewSet, ViajeViewSet
 )
 
 router = DefaultRouter()
@@ -13,6 +13,7 @@ router.register(r'users', UserViewSet)
 router.register(r'agencias', AgenciaViewSet)
 router.register(r'terminales', TerminalViewSet)
 router.register(r'rutas', RutaViewSet)
+router.register(r'viajes', ViajeViewSet)
 router.register(r'buses', BusViewSet)
 router.register(r'conductores', ConductorViewSet)
 router.register(r'pasajeros', PasajeroViewSet)
