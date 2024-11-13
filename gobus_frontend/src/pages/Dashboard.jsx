@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 export function Dashboard() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
+  console.log(isAuthenticated)
   return (
     <div>
       {isAuthenticated ? (

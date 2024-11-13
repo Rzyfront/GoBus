@@ -25,8 +25,8 @@ class Terminal(models.Model):
 class Ruta(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
-    distancia = models.DecimalField(max_digits=5, decimal_places=2)
-    duracion_estimada = models.DecimalField(max_digits=4, decimal_places=2)
+    distancia = models.CharField(30)
+    duracion_estimada = models.CharField(max_length=20)
 
     def __str__(self):
         return f"{self.origen} - {self.destino}"
@@ -54,6 +54,7 @@ class Viaje(models.Model):
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
     fecha_viaje = models.DateField()
     hora_salida = models.TimeField()
+    precio = models.CharField(max_length=10)
 
     def asientos_disponibles(self):
         boletos_vendidos = Boleto.objects.filter(viaje=self).count()
