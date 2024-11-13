@@ -8,4 +8,15 @@ El proyecto esta basado en una app para gestionar una empresa de transporte terr
 
 # Versions
 
-El proyecto requieres python en su version 3.8 o superior para correr el framework Django.
+El proyecto backend requiere python en su version 3.8 o superior para correr el framework Django.
+
+
+El proyecto frontend requiere node.js en su version 22.11.0 o superior para correr el framework React/Vite.
+
+# Indicaciones
+
+Para correr el proyecto asegurese de ejecutar el comando:
+
+pip install -r requirements.txt
+
+para instalar los requerimientos del proyecto
