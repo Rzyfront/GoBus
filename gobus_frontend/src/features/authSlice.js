@@ -18,14 +18,19 @@ export const loginUser = createAsyncThunk(
           Authorization: `Bearer ${response.data.access}`,
         },
       });
-      return {
-        accessToken: response.data.access,
-        refreshToken: response.data.refresh,
-        user: userResponse.data,
-        isAuthenticated: true,
-        loading: false,
-        error: null,
-      };
+       // Disparar la acción para guardar el usuario en el estado
+       dispatch(setUser(userResponse.data));
+
+       console.log(response.data)
+       // Retornar los datos que se usarán en el reducer
+       return {
+         accessToken: response.data.access,
+         refreshToken: response.data.refresh,
+         user: userResponse.data,
+         isAuthenticated: true,  // Asegúrate de que esto esté incluido
+         loading: false,
+         error: null,
+       };
 
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -59,12 +64,6 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    login: (state, action) => {
-      state.accessToken = action.payload;
-      state.refreshToken = null;
-      state.isAuthenticated = false;
-      state.loading = false;
-      state.error = null;
   },
   extraReducers: (builder) => {
     builder
@@ -74,9 +73,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.accessToken = action.payload.access;
-        state.refreshToken = action.payload.refresh;
-        state.isAuthenticated = true;
+        state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+        state.isAuthenticated = action.payload.isAuthenticated; 
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
