@@ -25,7 +25,7 @@ class Terminal(models.Model):
 class Ruta(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
-    distancia = models.CharField(30)
+    distancia = models.CharField(max_length=30)
     duracion_estimada = models.CharField(max_length=20)
 
     def __str__(self):
