@@ -28,16 +28,18 @@ class RutaSerializer(serializers.ModelSerializer):
         model = Ruta
         fields = ['id', 'origen', 'destino', 'distancia', 'duracion_estimada']
 
-class ViajeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Viaje
-        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida', 'precio']
-
 
 class BusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bus
         fields = ['id', 'placa', 'capacidad', 'tipo', 'estado']
+
+class ViajeSerializer(serializers.ModelSerializer):
+    ruta = RutaSerializer() 
+    bus = BusSerializer()    
+    class Meta:
+        model = Viaje
+        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida', 'precio']
 
 
 class ConductorSerializer(serializers.ModelSerializer):
@@ -59,4 +61,4 @@ class BoletoSerializer(serializers.ModelSerializer):
     viaje = ViajeSerializer() 
     class Meta:
         model = Boleto
-        fields = ['id','viaje','asiento', 'precio', 'estado', 'pasajero']
+        fields = ['id','viaje','asiento', 'estado', 'pasajero']

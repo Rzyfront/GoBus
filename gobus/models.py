@@ -90,7 +90,6 @@ class Boleto(models.Model):
     pasajero = models.ForeignKey(User, on_delete=models.CASCADE)
     viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)  # Relación con Viaje
     asiento = models.PositiveIntegerField()
-    precio = models.DecimalField(max_digits=6, decimal_places=2)
     estado = models.CharField(max_length=20, choices=[
         ('reservado', 'Reservado'),
         ('cancelado', 'Cancelado'),
