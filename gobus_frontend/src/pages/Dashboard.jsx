@@ -10,6 +10,8 @@ const Dashboard = () => {
     switch (activeView) {
       case "pos":
         return <Pos />;
+        case "historial":
+          return <div>Componente para Historial</div>;
       case "buses":
         return <div>Componente para Buses</div>;
       case "conductores":

@@ -15,6 +15,7 @@ import { logout } from "../features/authSlice"; // Asegúrate de que el slice es
 const Sidebar = ({ setActiveView }) => {
   const menuItems = [
     { name: "Punto de Venta", icon: <FaMoneyBillWave />, view: "pos" },
+    { name: "Historial de venta", icon: <FaMoneyBillWave />, view: "historial" },
     { name: "Viajes", icon: <FaTicketAlt />, view: "viajes" },
     { name: "Rutas", icon: <FaRoute />, view: "rutas" },
     { name: "Terminales", icon: <FaBuilding />, view: "terminales" },

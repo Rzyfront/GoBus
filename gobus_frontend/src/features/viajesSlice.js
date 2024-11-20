@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../api';
 
 // Crear una acción asincrónica para obtener los viajes
-export const fetchViajes = createAsyncThunk('viajes/fetchViajes', async (token) => {
+export const fetchViajes = createAsyncThunk('viajes/fetchViajes', async () => {
+  const token = localStorage.getItem("access_token");
   const response = await api.get('/viajes',{
     headers: {
       Authorization: `Bearer ${token}`, // Agregar el token en el encabezado
