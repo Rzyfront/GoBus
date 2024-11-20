@@ -25,7 +25,7 @@ class Terminal(models.Model):
 class Ruta(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
-    distancia = models.CharField(30)
+    distancia = models.CharField(max_length=30)
     duracion_estimada = models.CharField(max_length=20)
 
     def __str__(self):
@@ -65,7 +65,7 @@ class Viaje(models.Model):
         return self.bus.capacidad - boletos_vendidos
 
     def __str__(self):
-            return f"{self.fecha_viaje} {self.hora_salida}"
+            return f"{self.ruta.origen} - {self.ruta.destino} |  {self.fecha_viaje} - {self.hora_salida}"
 
 
 class Conductor(models.Model):
@@ -79,18 +79,18 @@ class Conductor(models.Model):
 
 
 class Pasajero(models.Model):
-    documento_identidad = models.CharField(max_length=20, unique=True)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación con el usuario de Django
+    nombre = models.CharField(max_length=255)
+    documento_identidad = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.documento_identidad}"
+        return f"{self.nombre} - {self.documento_identidad}"
 
 
 class Boleto(models.Model):
-    pasajero = models.ForeignKey(User, on_delete=models.CASCADE)
+    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE, null=True)
     viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)  # Relación con Viaje
     asiento = models.PositiveIntegerField()
-    precio = models.DecimalField(max_digits=6, decimal_places=2)
+    precio = models.CharField(max_length=10)
     estado = models.CharField(max_length=20, choices=[
         ('reservado', 'Reservado'),
         ('cancelado', 'Cancelado'),

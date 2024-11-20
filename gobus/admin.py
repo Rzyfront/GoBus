@@ -6,6 +6,7 @@ from .models import Bus
 from .models import Conductor
 from .models import Pasajero
 from .models import Boleto
+from .models import Viaje
 # Register your models here.
 
 admin.site.register(Agencia)
@@ -15,3 +16,4 @@ admin.site.register(Bus)
 admin.site.register(Conductor)
 admin.site.register(Pasajero)
 admin.site.register(Boleto)
+admin.site.register(Viaje)

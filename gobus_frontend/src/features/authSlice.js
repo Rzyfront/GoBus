@@ -1,6 +1,6 @@
 // src/features/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../api'
+import api from '../api';
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -13,25 +13,22 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
 
+      // Obtener los detalles del usuario
       const userResponse = await api.get('user/detail/', {
         headers: {
           Authorization: `Bearer ${response.data.access}`,
         },
       });
-       // Disparar la acción para guardar el usuario en el estado
-       dispatch(setUser(userResponse.data));
 
-       console.log(response.data)
-       // Retornar los datos que se usarán en el reducer
-       return {
-         accessToken: response.data.access,
-         refreshToken: response.data.refresh,
-         user: userResponse.data,
-         isAuthenticated: true,  // Asegúrate de que esto esté incluido
-         loading: false,
-         error: null,
-       };
-
+      // Retornar los datos que se usarán en el reducer
+      return {
+        accessToken: response.data.access,
+        refreshToken: response.data.refresh,
+        user: userResponse.data,
+        isAuthenticated: true,
+        loading: false,
+        error: null,
+      };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -61,9 +58,6 @@ const authSlice = createSlice({
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
     },
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,14 +69,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
-        state.isAuthenticated = action.payload.isAuthenticated; 
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.user = action.payload.user;  // Actualiza el usuario en el estado
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { logout, setUser } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,15 +1,25 @@
-import gobus from '../assets/Images/gobus.jpeg';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { loginUser } from '../features/authSlice';
+import { logout } from "../features/authSlice";
+import { useLocation } from "react-router-dom";
+
 
 export function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
     const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
   
     const [credentials, setCredentials] = useState({ username: '', password: '' });
+
+    useEffect(() => {
+        // Si la ruta es /login, ejecutar logout automáticamente
+        if (location.pathname === "/login") {
+          dispatch(logout());
+        }
+      }, [location, dispatch]);
   
     const handleChange = (e) => {
       setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -30,7 +40,7 @@ export function Login() {
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
                 <div className="flex justify-center">
-                    <img src={gobus} alt="Logo" className="w-[200px] object-cover rounded-full" />
+                    <img src="/gobus.webp" alt="Logo" className="w-[200px] object-cover rounded-full" />
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>

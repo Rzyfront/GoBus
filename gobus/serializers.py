@@ -28,16 +28,18 @@ class RutaSerializer(serializers.ModelSerializer):
         model = Ruta
         fields = ['id', 'origen', 'destino', 'distancia', 'duracion_estimada']
 
-class ViajeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Viaje
-        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida', 'precio']
-
 
 class BusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bus
         fields = ['id', 'placa', 'capacidad', 'tipo', 'estado']
+
+class ViajeSerializer(serializers.ModelSerializer):
+    ruta = RutaSerializer() 
+    bus = BusSerializer()    
+    class Meta:
+        model = Viaje
+        fields = ['id', 'ruta', 'bus', 'fecha_viaje', 'hora_salida', 'precio']
 
 
 class ConductorSerializer(serializers.ModelSerializer):
@@ -47,16 +49,23 @@ class ConductorSerializer(serializers.ModelSerializer):
 
 
 class PasajeroSerializer(serializers.ModelSerializer):
-    usuario = UserSerializer()  # Incluir el usuario como un nested serializer
-
     class Meta:
         model = Pasajero
-        fields = ['id', 'documento_identidad', 'usuario']
+        fields = ['id', 'documento_identidad', 'nombre']
 
 
 class BoletoSerializer(serializers.ModelSerializer):
     pasajero = PasajeroSerializer()  # Incluir el pasajero como un nested serializer
-    viaje = ViajeSerializer() 
+    viaje = serializers.PrimaryKeyRelatedField(queryset=Viaje.objects.all())
     class Meta:
         model = Boleto
         fields = ['id','viaje','asiento', 'precio', 'estado', 'pasajero']
+
+    def create(self, validated_data):
+        # Extraer datos del pasajero
+        pasajero_data = validated_data.pop('pasajero')
+        # Crear o obtener el pasajero
+        pasajero, created = Pasajero.objects.get_or_create(**pasajero_data)
+        # Crear el boleto con el pasajero relacionado
+        boleto = Boleto.objects.create(pasajero=pasajero, **validated_data)
+        return boleto
