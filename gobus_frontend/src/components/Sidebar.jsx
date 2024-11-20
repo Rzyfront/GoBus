@@ -9,12 +9,13 @@ import {
   FaMoneyBillWave,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { MdOutlinePointOfSale } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/authSlice"; // Asegúrate de que el slice esté correctamente importado
 
 const Sidebar = ({ setActiveView }) => {
   const menuItems = [
-    { name: "Punto de Venta", icon: <FaMoneyBillWave />, view: "pos" },
+    { name: "Punto de Venta", icon: <MdOutlinePointOfSale />, view: "pos" },
     { name: "Historial de venta", icon: <FaMoneyBillWave />, view: "historial" },
     { name: "Viajes", icon: <FaTicketAlt />, view: "viajes" },
     { name: "Rutas", icon: <FaRoute />, view: "rutas" },

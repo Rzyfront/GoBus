@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Pos from "../components/Pos";
+import Ventas from "../components/Ventas";
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("pos");
@@ -11,7 +12,7 @@ const Dashboard = () => {
       case "pos":
         return <Pos />;
         case "historial":
-          return <div>Componente para Historial</div>;
+          return <Ventas/>;
       case "buses":
         return <div>Componente para Buses</div>;
       case "conductores":

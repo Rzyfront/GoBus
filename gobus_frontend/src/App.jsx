@@ -5,6 +5,10 @@ import { Login } from './pages/Login';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from './pages/Dashboard';
 import store from './store/store.js'; 
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
 
 
@@ -24,6 +28,7 @@ function App() {
       <Route path='*' element={<Login />} />
     </Routes>
     </BrowserRouter>
+    <ToastContainer />
     </Provider>
   )
 }

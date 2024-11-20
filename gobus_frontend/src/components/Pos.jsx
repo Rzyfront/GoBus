@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify"; // Importa toast
 import { fetchViajes } from "../features/viajesSlice";
 import { crearBoleto } from "../features/boletosSlice";
 import { FaSearch } from "react-icons/fa";
@@ -9,31 +10,30 @@ const Pos = () => {
   const [showModal, setShowModal] = useState(false); // Estado para mostrar/ocultar el modal
   const [selectedViaje, setSelectedViaje] = useState(null); // Viaje seleccionado
   const [pasajero, setPasajero] = useState({
-    nombre: '',
-    documento: '',
+    nombre: "",
+    documento: "",
     asiento: 0,
-    estado: 'reservado',
+    estado: "reservado",
   });
 
   // Obtener el estado de viajes desde Redux
   const { viajes, loading, error } = useSelector((state) => state.viajes);
-  const { loading: creatingBoleto, error: boletoError } = useSelector(
+  const { boletos, status: creatingBoleto, error: boletoError } = useSelector(
     (state) => state.boletos
   );
-  // Hacer la solicitud para obtener los viajes cuando el componente se monta
+
   useEffect(() => {
-    dispatch(fetchViajes()); // Disparar la acción para cargar los viajes
+    if (!loading) dispatch(fetchViajes()); // Disparar la acción para cargar los viajes
   }, [dispatch]);
 
-  // Mostrar loading mientras los viajes se están obteniendo
-  if (loading) {
-    return <div>Cargando viajes...</div>;
-  }
-
-  // Mostrar un mensaje de error si ocurre un problema
-  if (error) {
-    return <div>Error al cargar los viajes: {error}</div>;
-  }
+  // Mostrar notificación de éxito o error al crear un boleto
+  // useEffect(() => {
+  //   if (creatingBoleto === "succeeded") {
+  //     toast.success("¡Boleto creado exitosamente! 🎉");
+  //   } else if (creatingBoleto === "failed") {
+  //     toast.error(`Error al crear el boleto: ${boletoError}`);
+  //   }
+  // }, [creatingBoleto, boletoError]);
 
   const handleCardClick = (viaje) => {
     setSelectedViaje(viaje); // Establecer el viaje seleccionado
@@ -53,9 +53,31 @@ const Pos = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Disparar la acción para crear el boleto
-    dispatch(crearBoleto({viaje: selectedViaje, pasajero}));
+    dispatch(crearBoleto({ viaje: selectedViaje, pasajero }))
+    .unwrap()
+      .then(() => {
+        // Notificación azul al éxito
+        toast.success("¡Boleto creado exitosamente!", {
+          className: "bg-blue-500 text-white",
+        });
+      })
+      .catch((error) => {
+        // Notificación azul al fallo
+        toast.error(`Error al crear el boleto: ${error.message}`, {
+          className: "bg-blue-500 text-white",
+        });
+      });
     handleModalClose(); // Cerrar el modal después de la acción
   };
+
+  if (loading) {
+    return <div>Cargando viajes...</div>;
+  }
+
+  if (error) {
+    return <div>Error al cargar los viajes: {error}</div>;
+  }
+
 
   return (
     <div
@@ -195,10 +217,10 @@ const Pos = () => {
               </div>
               <button
                 type="submit"
-                disabled={creatingBoleto}
+                disabled={creatingBoleto === 'loading' ? true : false}
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg"
               >
-                {creatingBoleto ? 'Creando...' : 'Comprar Boleto'}
+                {creatingBoleto === 'loading' ? 'Creando...' : 'Comprar Boleto'}
               </button>
               <button
                 type="button"
@@ -219,6 +241,7 @@ const Pos = () => {
     </div>
   );
 };
+
 
 export default Pos;
 
